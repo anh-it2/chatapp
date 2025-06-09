@@ -24,6 +24,14 @@ class SignInViewModel @Inject constructor() : ViewModel(){
             _state.value = signInState.Error(e.message ?: "Unknown Error")
         }
     }
+//    fun changePassWord(newPass: String){
+//        _state.value = signInState.Loading
+//        try {
+//            FirebaseAuth.getInstance().currentUser?.updatePassword(newPass)
+//        }catch (e:Exception){
+//            _state.value = signInState.Error(e.message ?: "Unknown Error")
+//        }
+//    }
 }
 
 sealed class signInState{
