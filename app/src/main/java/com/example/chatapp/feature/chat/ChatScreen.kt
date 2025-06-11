@@ -19,6 +19,7 @@
     import androidx.compose.foundation.layout.size
     import androidx.compose.foundation.lazy.LazyColumn
     import androidx.compose.foundation.lazy.items
+    import androidx.compose.foundation.lazy.rememberLazyListState
     import androidx.compose.foundation.shape.CircleShape
     import androidx.compose.foundation.shape.RoundedCornerShape
     import androidx.compose.foundation.text.KeyboardActions
@@ -94,7 +95,6 @@
                 )
             }
         ) {
-            val margin: Int
             val viewModel : ChatViewModel = hiltViewModel()
             var chooserDialog by remember { mutableStateOf(false) }
 //            val cameraImageUri = remember { mutableStateOf<Uri?>(null) }
@@ -205,6 +205,10 @@
     ){
         var msg by remember { mutableStateOf("") }
         val hideKeyboardController = LocalSoftwareKeyboardController.current
+        val listState = rememberLazyListState()
+        LaunchedEffect(message.size) {
+            listState.animateScrollToItem(message.size)
+        }
         Box(
             modifier = Modifier.fillMaxSize()
         ){
@@ -213,7 +217,8 @@
             ) {
 
                 LazyColumn (
-                    modifier = Modifier.padding(bottom = 10.dp)
+                    modifier = Modifier.padding(bottom = 60.dp).weight(1f),
+                    state = listState
                 ){
                     items(message){ message ->
                         ChatBubble(message = message)
@@ -223,6 +228,7 @@
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
+                .padding(0.dp)
                 .background(color = androidx.compose.ui.graphics.Color.DarkGray)
                 .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -311,7 +317,7 @@
                         Icon(Icons.Default.Person, contentDescription = null, tint = Color.White)
                         Column (
                             modifier = Modifier
-                                .padding(5.dp)
+                                .padding(10.dp)
                                 .background(color = bubbleColor, shape = RoundedCornerShape(8.dp))
                                 .padding(10.dp)
                         ){
@@ -334,7 +340,7 @@
                     }else{
                         Column(
                             modifier = Modifier
-                                .padding(bottom = 10.dp)
+                                .padding(10.dp)
                                 .background(color = bubbleColor, shape = RoundedCornerShape(8.dp))
                                 .padding(10.dp),
                         ){
